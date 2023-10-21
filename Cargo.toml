@@ -5,6 +5,7 @@ edition = "2021"
 
 
 [dependencies]
+bevy = "0.11.3"
 reqwest = "0.11.22"
 #rppal = "0.15.0"
 tokio = "1.33.0"
