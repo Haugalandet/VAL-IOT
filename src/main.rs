@@ -5,7 +5,7 @@ mod utils;
 mod ui;
 
 use bevy::prelude::*;
-use ui::{layout::build_main_menu, systems::input_field, components::InputResource};
+use ui::{layout::build_main_menu, systems::{text_input}, components::InputResource};
 
 fn main() {
     App::new()
@@ -21,6 +21,6 @@ fn main() {
         )
         .insert_resource(InputResource("".to_string()))
         .add_systems(Startup, build_main_menu)
-        .add_systems(Update, input_field)
+        .add_systems(Update, text_input)
         .run();
 }
