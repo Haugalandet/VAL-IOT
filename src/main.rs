@@ -5,7 +5,7 @@ mod utils;
 mod ui;
 
 use bevy::prelude::*;
-use ui::{layout::build_main_menu, systems::{text_input}, components::InputResource};
+use ui::{UIPlugin, main_menu::MainMenuPlugin};
 
 fn main() {
     App::new()
@@ -19,8 +19,11 @@ fn main() {
             }) // Window stuff
             .set(ImagePlugin::default_nearest())
         )
-        .insert_resource(InputResource("".to_string()))
-        .add_systems(Startup, build_main_menu)
-        .add_systems(Update, text_input)
+        .add_plugins(
+            (
+                UIPlugin,
+                MainMenuPlugin
+            )
+        )
         .run();
 }
