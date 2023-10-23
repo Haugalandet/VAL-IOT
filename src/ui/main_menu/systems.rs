@@ -61,7 +61,7 @@ pub fn connect(
 
                     if let Ok(mut rt) = tokio::runtime::Runtime::new() {
                         rt.block_on(async {
-                            match establish_connection(c, s).await {
+                            match establish_connection(&c, s).await {
                                 Ok(res) => if let Ok(r) = res.text().await {
                                     println!("{}", r);
                                 }
