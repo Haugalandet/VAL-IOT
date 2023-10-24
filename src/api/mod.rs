@@ -1,12 +1,16 @@
 
 
-use reqwest::{Client, Response};
+use std::time::Duration;
+
+use reqwest::{Client, Response, StatusCode};
+use tokio::time::sleep;
 
 
 use crate::utils::constants::api::apiroot;
 
 use self::user::User;
 mod user;
+pub mod poll;
 
 pub fn create_client() -> Client {
     Client::new()
@@ -14,9 +18,6 @@ pub fn create_client() -> Client {
 
 
 pub async fn establish_connection(client: &Client, room_code: String) -> Result<Response, reqwest::Error> {
-
-   
-
     client.execute(
         client
             .post(apiroot("users"))
@@ -40,7 +41,7 @@ pub async fn confirm_connection(client: Client, user: &User) -> Result<Response,
         .await
 }
 
-pub async fn refresh_connection(client: Client, user: &User) -> Result<Response, reqwest::Error> {
+pub async fn refresh_connection(client: &Client, user: &User) -> Result<Response, reqwest::Error> {
     client
         .execute(
             client
@@ -51,7 +52,7 @@ pub async fn refresh_connection(client: Client, user: &User) -> Result<Response,
         .await
 }
 
-pub async fn disconnect(client: Client, user: &User) -> Result<Response, reqwest::Error> {
+pub async fn disconnect(client: &Client, user: &User) -> Result<Response, reqwest::Error> {
     client
         .execute(
             client

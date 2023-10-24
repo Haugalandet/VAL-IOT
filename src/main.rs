@@ -5,7 +5,7 @@ mod utils;
 mod ui;
 
 use bevy::prelude::*;
-use ui::{UIPlugin, main_menu::MainMenuPlugin};
+use ui::{UIPlugin, main_menu::MainMenuPlugin, vote_poll::VotePollPlugin};
 
 fn main() {
     App::new()
@@ -22,7 +22,8 @@ fn main() {
         .add_plugins(
             (
                 UIPlugin,
-                MainMenuPlugin
+                MainMenuPlugin,
+                VotePollPlugin
             )
         )
         .run();

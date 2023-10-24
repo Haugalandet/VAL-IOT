@@ -2,7 +2,7 @@
 use bevy::{prelude::*, input::{keyboard::KeyboardInput, ButtonState}, tasks::ComputeTaskPool, app::AppExit};
 use tokio::runtime::Runtime;
 
-use crate::{utils::constants::ui::INPUT_MAX_COUNT, api::{establish_connection, create_client}};
+use crate::{utils::constants::ui::INPUT_MAX_COUNT, api::{establish_connection, create_client, poll::get_poll}, ui::{states::WindowState, components::PollResource}};
 
 use super::components::{InputField, InputResource, ApiClient, ConnectButton, QuitButton};
 
@@ -44,13 +44,15 @@ pub fn text_input(
 pub fn connect(
     string: Res<InputResource>,
     client: Res<ApiClient>,
-    mut btn_query: Query<(&Interaction, &mut UiImage, &mut BackgroundColor), (Changed<Interaction>, With<ConnectButton>)>,
-    asset_server: Res<AssetServer>
+    mut btn_query: Query<(&Interaction, &mut UiImage), (Changed<Interaction>, With<ConnectButton>)>,
+    asset_server: Res<AssetServer>,
+    mut state: ResMut<NextState<WindowState>>,
+    mut poll: ResMut<PollResource>
 ) {
 
     let normal_button : Handle<Image> = asset_server.load("mainmenu/button.png").into();
 
-    if let Ok((interaction, mut image, mut background_color)) = btn_query.get_single_mut() {
+    if let Ok((interaction, mut image)) = btn_query.get_single_mut() {
         match *interaction {
             Interaction::Pressed => {
                 image.texture = normal_button;
@@ -59,11 +61,19 @@ pub fn connect(
 
                     let s = string.0.clone();
 
-                    if let Ok(mut rt) = tokio::runtime::Runtime::new() {
+                    if let Ok(rt) = tokio::runtime::Runtime::new() {
                         rt.block_on(async {
                             match establish_connection(&c, s).await {
-                                Ok(res) => if let Ok(r) = res.text().await {
-                                    println!("{}", r);
+                                Ok(res) => if res.status().is_success() {
+                                    println!("Established connection.");
+
+                                    if let Ok(p) = get_poll(&c, 0).await {
+                                        state.set(WindowState::VotePoll);
+                                        poll.poll = Some(p);
+                                    } else {
+                                        println!("Could not get poll");
+                                    }
+
                                 }
                                 Err(res) => println!("Error: {:?}", res),
                             }
