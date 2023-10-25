@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{ui::{main_menu::components::MainMenu, components::PollResource}, utils::funcs::ui::{create_text_bundle, create_button_bundle}};
 
-use super::component::{VotePoll, Choice};
+use super::component::{VotePoll, Choice, SendVotes, ResetVotes};
 
 pub fn build_vote_poll(
     mut cmd: Commands,
@@ -58,8 +58,33 @@ pub fn build_vote_poll(
                         create_text_bundle(&asset_server, &p.description)
                     );
                 });
+                
+                // == Send Votes ==
+                parent.spawn(
+                    (
+                        create_button_bundle(Val::Px(350.0), Val::Px(550.0), &asset_server),
+                        SendVotes
+                    )
+                ).with_children(|parent| {
+                    parent.spawn(
+                        create_text_bundle(&asset_server, "Send Votes")
+                    );
+                });
+
+                // == Reset Votes ==
+                parent.spawn(
+                    (
+                        create_button_bundle(Val::Px(350.0), Val::Px(550.0), &asset_server),
+                        ResetVotes
+                    )
+                ).with_children(|parent| {
+                    parent.spawn(
+                        create_text_bundle(&asset_server, "Reset Votes")
+                    );
+                });
             });
 
+            // == Choices ==
             cmd.spawn(
                 (
                     NodeBundle {

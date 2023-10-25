@@ -22,3 +22,9 @@ impl Default for RefreshTimer {
         Self(0.0)
     }
 }
+#[derive(Component)]
+pub struct SendVotes;
+
+
+#[derive(Component)]
+pub struct ResetVotes;
