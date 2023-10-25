@@ -4,6 +4,9 @@ pub mod api {
     pub fn apiroot(path: &str)-> String {
         format!("{}/{}", APIROOT, path)
     }
+
+    /// Resfresh time in seconds
+    pub const REFRESH_TIME: f32 = 600.0;
 }
 
 pub mod ui {

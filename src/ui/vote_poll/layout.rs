@@ -8,7 +8,7 @@ pub fn build_vote_poll(
     mut cmd: Commands,
     main_menu: Query<Entity, With<MainMenu>>,
     asset_server: Res<AssetServer>,
-    mut poll: ResMut<PollResource>
+    poll: Res<PollResource>
 ) {
     if let Some(p) = poll.poll.clone() {
         if let Ok(e) = main_menu.get_single() {
