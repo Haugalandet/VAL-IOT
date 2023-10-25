@@ -1,15 +1,14 @@
 
 
-use std::time::Duration;
-
+use bevy::prelude::default;
 use reqwest::{Client, Response, StatusCode};
-use tokio::time::sleep;
+
 
 
 use crate::utils::constants::api::apiroot;
 
 use self::user::User;
-mod user;
+pub mod user;
 pub mod poll;
 
 pub fn create_client() -> Client {
@@ -24,13 +23,14 @@ pub async fn establish_connection(client: &Client, room_code: String) -> Result<
             .json(&User {
                 username: room_code.clone(),
                 password: room_code,
+                ..default()
             })
             .build()?
     ).await
 }
 
 
-pub async fn confirm_connection(client: Client, user: &User) -> Result<Response, reqwest::Error> {
+pub async fn confirm_connection(client: &Client, user: &User) -> Result<Response, reqwest::Error> {
     client
         .execute(
             client

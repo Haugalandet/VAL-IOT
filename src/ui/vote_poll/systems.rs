@@ -1,7 +1,7 @@
 use bevy::ui::Interaction;
 use bevy::prelude::*;
 
-use crate::ui::{main_menu::components::{InputResource, ApiClient}, states::WindowState, components::{PollResource, VoteResource}};
+use crate::ui::{main_menu::components::{InputResource, ApiClient}, states::WindowState, components::{PollResource, VoteResource, UserResource}};
 
 use super::component::Choice;
 
@@ -33,4 +33,12 @@ pub fn vote(
             }
         }
     }
+}
+
+
+pub fn refresh_poll_connection(
+    client: Res<ApiClient>,
+    mut user: ResMut<UserResource>
+) {
+
 }

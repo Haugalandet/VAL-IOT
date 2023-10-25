@@ -2,7 +2,7 @@
 use bevy::{prelude::*, input::{keyboard::KeyboardInput, ButtonState}, tasks::ComputeTaskPool, app::AppExit};
 use tokio::runtime::Runtime;
 
-use crate::{utils::constants::ui::INPUT_MAX_COUNT, api::{establish_connection, create_client, poll::get_poll}, ui::{states::WindowState, components::PollResource}};
+use crate::{utils::constants::ui::INPUT_MAX_COUNT, api::{establish_connection, create_client, poll::get_poll, user::User, confirm_connection}, ui::{states::WindowState, components::{PollResource, UserResource}}};
 
 use super::components::{InputField, InputResource, ApiClient, ConnectButton, QuitButton};
 
@@ -47,7 +47,8 @@ pub fn connect(
     mut btn_query: Query<(&Interaction, &mut UiImage), (Changed<Interaction>, With<ConnectButton>)>,
     asset_server: Res<AssetServer>,
     mut state: ResMut<NextState<WindowState>>,
-    mut poll: ResMut<PollResource>
+    mut poll: ResMut<PollResource>,
+    mut ures: ResMut<UserResource>
 ) {
 
     let normal_button : Handle<Image> = asset_server.load("mainmenu/button.png").into();
@@ -63,19 +64,37 @@ pub fn connect(
 
                     if let Ok(rt) = tokio::runtime::Runtime::new() {
                         rt.block_on(async {
-                            match establish_connection(&c, s).await {
-                                Ok(res) => if res.status().is_success() {
-                                    println!("Established connection.");
 
+                            let final_res: Result<bool, reqwest::Error> = async {
+                                let user_res = establish_connection(&c, s).await?;
+                                if !user_res.status().is_success() { 
+                                    println!("Could not establish connection:\n{:?}\n", user_res);
+                                    return Ok(false);
+                                }
+                                
+                                let user: User = user_res.json().await?;
+
+                                let con_res = confirm_connection(&c, &user).await?;
+
+                                if !con_res.status().is_success() {
+                                    println!("Could not confirm connection:\n{:?}\n", con_res);
+                                    return Ok(false);
+                                }
+
+                                ures.0 = user;
+
+                                Ok(true)
+                            }.await;
+
+                            if let Ok(final_res) = final_res {
+                                if final_res {
                                     if let Ok(p) = get_poll(&c, 0).await {
                                         state.set(WindowState::VotePoll);
                                         poll.poll = Some(p);
                                     } else {
                                         println!("Could not get poll");
                                     }
-
                                 }
-                                Err(res) => println!("Error: {:?}", res),
                             }
                         });
                     }
