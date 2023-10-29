@@ -1,6 +1,4 @@
-use std::ops::Add;
-
-use bevy::ui::Interaction;
+use bevy::{ui::Interaction, utils::HashMap};
 use bevy::prelude::*;
 
 use crate::{ui::{main_menu::components::{InputResource, ApiClient}, states::WindowState, components::{PollResource, VoteResource, UserResource}}, api::refresh_connection, utils::constants::api::REFRESH_TIME};
@@ -37,6 +35,30 @@ pub fn vote(
     }
 }
 
+pub fn reset(
+    mut btn_query: Query<(&Interaction, &mut UiImage, &Choice), (Changed<Interaction>)>,
+    asset_server: Res<AssetServer>,
+    mut votes: ResMut<VoteResource>
+) {
+
+    let normal_button : Handle<Image> = asset_server.load("mainmenu/button.png").into();
+
+    if let Ok((interaction, mut image, c)) = btn_query.get_single_mut() {
+        match *interaction {
+            Interaction::Pressed => {
+                image.texture = normal_button;
+
+                votes.votes = HashMap::new();
+            }
+            Interaction::Hovered => {
+                image.texture = asset_server.load("mainmenu/buttonhover.png").into();
+            }
+            Interaction::None => {
+                image.texture = normal_button;
+            }
+        }
+    }
+}
 
 pub fn refresh_poll_connection(
     client: Res<ApiClient>,
