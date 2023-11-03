@@ -22,6 +22,7 @@ pub fn build_vote_poll(
                         justify_content: JustifyContent::Center,
                         align_items: AlignItems::Center,
                         row_gap: Val::Px(10.0), 
+                        column_gap: Val::Px(5.0),
                         width: Val::Percent(100.0), 
                         height: Val::Percent(100.0),
                         ..default()
@@ -46,40 +47,34 @@ pub fn build_vote_poll(
                         ..default()
                     }).with_children(|parent| {
                         // == Title Text ==
-                        parent.spawn(create_text_bundle(&asset_server, &p.title));
+                        parent.spawn(create_text_bundle(&asset_server, &p.title, 60.0));
                     });
                 // == Description ==
                 parent.spawn(
-                    (
-                        create_button_bundle(Val::Px(350.0), Val::Px(550.0), &asset_server),
-                    )
-                ).with_children(|parent| {
-                    parent.spawn(
-                        create_text_bundle(&asset_server, &p.description)
-                    );
-                });
+                        create_text_bundle(&asset_server, &p.description, 45.0)
+                );
                 
                 // == Send Votes ==
                 parent.spawn(
                     (
-                        create_button_bundle(Val::Px(350.0), Val::Px(550.0), &asset_server),
+                        create_button_bundle(Val::Px(100.0), Val::Px(150.0), &asset_server),
                         SendVotes
                     )
                 ).with_children(|parent| {
                     parent.spawn(
-                        create_text_bundle(&asset_server, "Send Votes")
+                        create_text_bundle(&asset_server, "Send Votes", 30.0)
                     );
                 });
 
                 // == Reset Votes ==
                 parent.spawn(
                     (
-                        create_button_bundle(Val::Px(350.0), Val::Px(550.0), &asset_server),
+                        create_button_bundle(Val::Px(100.0), Val::Px(150.0), &asset_server),
                         ResetVotes
                     )
                 ).with_children(|parent| {
                     parent.spawn(
-                        create_text_bundle(&asset_server, "Reset Votes")
+                        create_text_bundle(&asset_server, "Reset Votes", 30.0)
                     );
                 });
             });
@@ -93,6 +88,7 @@ pub fn build_vote_poll(
                             justify_content: JustifyContent::Center,
                             align_items: AlignItems::Center,
                             row_gap: Val::Px(10.0), 
+                            column_gap: Val::Px(5.0),
                             width: Val::Percent(100.0), 
                             height: Val::Percent(100.0),
                             ..default()
@@ -113,7 +109,7 @@ pub fn build_vote_poll(
                         
                     ).with_children(|parent| {
                         parent.spawn(
-                            create_text_bundle(&asset_server, &c)
+                            create_text_bundle(&asset_server, &c, 20.0)
                         );
                     });
                 }

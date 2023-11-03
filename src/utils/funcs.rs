@@ -3,7 +3,8 @@ pub mod ui {
     
     pub fn create_text_bundle(
         asset_server: &Res<AssetServer>,
-        text: &str
+        text: &str,
+        font_size: f32
     ) -> TextBundle {
         TextBundle {
             text: Text{
@@ -11,7 +12,7 @@ pub mod ui {
                     TextSection::new(text, 
                     TextStyle {
                         font: asset_server.load("upheavtt.ttf"),
-                        font_size: 60.0,
+                        font_size,
                         color: Color::WHITE.into(),
                     })
                 ],

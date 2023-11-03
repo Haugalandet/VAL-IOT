@@ -11,15 +11,12 @@ pub struct Poll {
 impl Default for Poll {
     fn default() -> Self {
         Self {
-            title: "Title".to_string(),
-            description: "Description\nDescription\nDeez Nutz".to_string(),
+            title: "Best Programming Paradigm".to_string(),
+            description: "What is the best paradigm?".to_string(),
             choices: vec![
-                "A".to_string(),
-                "B".to_string(),
-                "C".to_string(),
-                "D".to_string(),
-                "E".to_string(),
-                "F".to_string()
+                "OOP".to_string(),
+                "FOP".to_string(),
+                "ChatGPT".to_string()
                 ]
         }
     }

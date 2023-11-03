@@ -16,19 +16,9 @@ impl Plugin for VotePollPlugin {
             .init_resource::<VoteResource>()
             .add_systems(OnEnter(WindowState::VotePoll), build_vote_poll)
             .add_systems(OnEnter(WindowState::VotePoll), refresh_poll_connection)
-            .add_systems(Update, debug)
             .add_systems(Update, (
                 vote,
                 reset
             ));
-    }
-}
-
-fn debug(
-    input: Res<Input<KeyCode>>,
-    poll: Res<VoteResource>
-) {
-    if input.just_pressed(KeyCode::W) {
-        println!("Votes: {:?}", poll.votes.values());
     }
 }

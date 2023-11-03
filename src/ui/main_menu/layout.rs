@@ -40,7 +40,7 @@ pub fn build_main_menu(mut cmd: Commands, asset_server: Res<AssetServer>) {
                     ..default()
                 }).with_children(|parent| {
                     // == Text ==
-                    parent.spawn(create_text_bundle(&asset_server, "Enter Room Code"));
+                    parent.spawn(create_text_bundle(&asset_server, "Enter Room Code", 60.0));
                 });
             // == Play ==
             parent.spawn(
@@ -51,7 +51,7 @@ pub fn build_main_menu(mut cmd: Commands, asset_server: Res<AssetServer>) {
             ).with_children(|parent|{
                 parent.spawn(
                     (
-                            create_text_bundle(&asset_server, ""),
+                            create_text_bundle(&asset_server, "", 60.0),
                             InputField
                         )
                 );
@@ -64,7 +64,7 @@ pub fn build_main_menu(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 )
             ).with_children(|parent|{
                 parent.spawn(
-                    create_text_bundle(&asset_server, "Connect"),
+                    create_text_bundle(&asset_server, "Connect", 60.0),
                 );
             });
             parent.spawn(
@@ -74,7 +74,7 @@ pub fn build_main_menu(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 )
             ).with_children(|parent|{
                 parent.spawn(
-                    create_text_bundle(&asset_server, "Quit"),
+                    create_text_bundle(&asset_server, "Quit", 60.0),
                 );
             });
         });
