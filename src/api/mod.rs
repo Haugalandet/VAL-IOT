@@ -7,57 +7,28 @@ use reqwest::{Client, Response, StatusCode};
 
 use crate::utils::constants::api::apiroot;
 
-use self::user::User;
-pub mod user;
 pub mod poll;
 
 pub fn create_client() -> Client {
     Client::new()
 }
 
-
-pub async fn establish_connection(client: &Client, room_code: String) -> Result<Response, reqwest::Error> {
-    client.execute(
-        client
-            .post(apiroot("users"))
-            .json(&User {
-                username: room_code.clone(),
-                password: room_code,
-                ..default()
-            })
-            .build()?
-    ).await
-}
-
-
-pub async fn confirm_connection(client: &Client, user: &User) -> Result<Response, reqwest::Error> {
+pub async fn connect_to_poll(client: &Client, poll_id: usize) -> Result<Response, reqwest::Error> {
     client
         .execute(
             client
-                .post(apiroot("auth/login"))
-                .json(user)
+                .post(apiroot(&format!("polls/{}/iot", poll_id)))
                 .build()?
         )
         .await
 }
 
-pub async fn refresh_connection(client: &Client, user: &User) -> Result<Response, reqwest::Error> {
+pub async fn refresh_connection(client: &Client, header: &str) -> Result<Response, reqwest::Error> {
     client
         .execute(
             client
                 .post(apiroot("auth/refresh"))
-                .json(user)
-                .build()?
-        )
-        .await
-}
-
-pub async fn disconnect(client: &Client, user: &User) -> Result<Response, reqwest::Error> {
-    client
-        .execute(
-            client
-                .post(apiroot("auth/logout"))
-                .json(user)
+                .header("Authorization", header)
                 .build()?
         )
         .await

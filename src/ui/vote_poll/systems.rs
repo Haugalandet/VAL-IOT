@@ -1,7 +1,9 @@
 use bevy::{ui::Interaction, utils::HashMap};
 use bevy::prelude::*;
 
-use crate::{ui::{main_menu::components::{InputResource, ApiClient}, states::WindowState, components::{PollResource, VoteResource, UserResource}}, api::refresh_connection, utils::constants::api::REFRESH_TIME};
+use crate::api::refresh_connection;
+use crate::ui::components::HeaderResource;
+use crate::{ui::{main_menu::components::ApiClient, components::VoteResource}, utils::constants::api::REFRESH_TIME};
 
 use super::component::{Choice, HasRefreshed, RefreshTimer, ResetVotes};
 
@@ -69,11 +71,15 @@ pub fn reset(
 
 pub fn refresh_poll_connection(
     client: Res<ApiClient>,
-    mut user: ResMut<UserResource>,
     mut refresh: Local<HasRefreshed>,
     mut local_time: Local<RefreshTimer>,
+    mut header: ResMut<HeaderResource>,
     time: Res<Time>
 ) {
+
+    if header.0.is_empty() {
+        return;
+    }
 
     local_time.0 += time.delta_seconds();
 
@@ -87,8 +93,6 @@ pub fn refresh_poll_connection(
 
     let c = client.0.clone();
 
-    let u = user.0.clone();
-
     if !refresh.0 {
         return;
     }
@@ -96,11 +100,11 @@ pub fn refresh_poll_connection(
     if let Ok(rt) = tokio::runtime::Runtime::new() {
         rt.block_on(async {
             let _: Result<(), reqwest::Error> = async {
-                let res = refresh_connection(&c, &u).await?;
+                let res = refresh_connection(&c, &header.0).await?;
 
                 if res.status().is_success() {
-                    let new_user = res.json().await?;
-                    user.0 = new_user;
+                    let data: String = res.json().await?;
+                    header.0 = data;
                 }
 
                 refresh.0 = false;

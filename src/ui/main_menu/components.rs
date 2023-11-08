@@ -1,5 +1,5 @@
-use bevy::{prelude::{Component, Resource}, tasks::Task, ecs::query::WorldQuery};
-use reqwest::{Response, Client};
+use bevy::prelude::{Component, Resource};
+use reqwest::Client;
 
 use crate::api::create_client;
 

@@ -1,6 +1,6 @@
 use bevy::{prelude::*, utils::HashMap};
 
-use crate::api::{poll::Poll, user::User};
+use crate::api::poll::Poll;
 
 #[derive(Resource)]
 pub struct PollResource {
@@ -25,12 +25,5 @@ impl Default for VoteResource {
 }
 
 
-#[derive(Resource)]
-pub struct UserResource(pub User);
-
-
-impl Default for UserResource {
-    fn default() -> Self {
-        Self(Default::default())
-    }
-}
+#[derive(Resource, Default)]
+pub struct HeaderResource(pub String);

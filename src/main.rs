@@ -1,5 +1,3 @@
-mod client;
-mod votes;
 mod api;
 mod utils;
 mod ui;
