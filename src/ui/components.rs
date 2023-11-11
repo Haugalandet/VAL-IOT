@@ -1,6 +1,6 @@
 use bevy::{prelude::*, utils::HashMap};
 
-use crate::api::poll::Poll;
+use crate::api::poll::{Poll, self};
 
 #[derive(Resource)]
 pub struct PollResource {
@@ -15,7 +15,7 @@ impl Default for PollResource {
 
 #[derive(Resource)]
 pub struct VoteResource {
-    pub votes: HashMap<String, usize>
+    pub votes: HashMap<poll::Choice, usize>
 }
 
 impl Default for VoteResource {

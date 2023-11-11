@@ -1,10 +1,13 @@
 use bevy::prelude::*;
 
+use crate::api::poll;
+
+
 #[derive(Component)]
 pub struct VotePoll;
 
 #[derive(Component)]
-pub struct Choice(pub String);
+pub struct Choice(pub poll::Choice);
 
 pub struct HasRefreshed(pub bool);
 

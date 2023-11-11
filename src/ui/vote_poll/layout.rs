@@ -109,7 +109,7 @@ pub fn build_vote_poll(
                         
                     ).with_children(|parent| {
                         parent.spawn(
-                            create_text_bundle(&asset_server, &c, 20.0)
+                            create_text_bundle(&asset_server, &c.title, 20.0)
                         );
                     });
                 }

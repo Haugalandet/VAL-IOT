@@ -10,7 +10,7 @@ fn main() {
         .add_plugins(DefaultPlugins
             .set(WindowPlugin {
                 primary_window: Some(Window {
-                    title: "What is a Monad".to_string(),
+                    title: "VAL-IOT".to_string(),
                     ..Default::default()
                 }),
                 ..Default::default()
