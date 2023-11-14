@@ -15,7 +15,7 @@ impl Default for PollResource {
 
 #[derive(Resource)]
 pub struct VoteResource {
-    pub votes: HashMap<poll::Choice, usize>
+    pub votes: HashMap<String, poll::Choice>
 }
 
 impl Default for VoteResource {

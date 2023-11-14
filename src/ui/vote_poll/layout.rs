@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{ui::{main_menu::components::MainMenu, components::PollResource}, utils::funcs::ui::{create_text_bundle, create_button_bundle}};
 
-use super::component::{VotePoll, Choice, SendVotes, ResetVotes};
+use super::component::{VotePoll, ChoiceComponent, SendVotes, ResetVotes};
 
 pub fn build_vote_poll(
     mut cmd: Commands,
@@ -104,7 +104,7 @@ pub fn build_vote_poll(
                     parent.spawn(
                         (
                             create_button_bundle(Val::Px(80.0), Val::Px(350.0), &asset_server),
-                            Choice(c.clone())
+                            ChoiceComponent(c.clone())
                         )
                         
                     ).with_children(|parent| {

@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use self::{layout::build_vote_poll, systems::{vote, refresh_poll_connection, reset}};
+use self::{layout::build_vote_poll, systems::{vote, refresh_poll_connection, reset, send_votes}};
 
 use super::{states::WindowState, components::VoteResource};
 
@@ -18,7 +18,8 @@ impl Plugin for VotePollPlugin {
             .add_systems(OnEnter(WindowState::VotePoll), refresh_poll_connection)
             .add_systems(Update, (
                 vote,
-                reset
+                reset,
+                send_votes
             ));
     }
 }

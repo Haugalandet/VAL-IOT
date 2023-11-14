@@ -2,7 +2,7 @@ use bevy::prelude::default;
 use reqwest::Client;
 use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Poll {
     pub pollId: Option<usize>,
     pub title: String,
@@ -10,7 +10,7 @@ pub struct Poll {
     pub choices: Vec<Choice>
 }
 
-#[derive(Serialize, Deserialize, Clone, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Serialize, Deserialize, Clone, Default, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 pub struct Choice {
     pub choiceId: Option<usize>,
     pub title: String,

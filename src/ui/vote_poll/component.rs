@@ -7,7 +7,7 @@ use crate::api::poll;
 pub struct VotePoll;
 
 #[derive(Component)]
-pub struct Choice(pub poll::Choice);
+pub struct ChoiceComponent(pub poll::Choice);
 
 pub struct HasRefreshed(pub bool);
 
