@@ -2,7 +2,7 @@
 use bevy::{prelude::*, app::AppExit};
 
 
-use crate::{utils::constants::ui::INPUT_MAX_COUNT, api::{create_client, poll::get_poll, connect_to_poll}, ui::{states::WindowState, components::{PollResource, HeaderResource}}};
+use crate::{utils::constants::ui::INPUT_MAX_COUNT, api::{create_client, poll::{get_poll, Poll}, connect_to_poll}, ui::{states::WindowState, components::{PollResource, HeaderResource}}};
 
 use super::components::{InputField, InputResource, ApiClient, ConnectButton, QuitButton};
 
@@ -73,17 +73,29 @@ pub fn connect(
                                     return Ok(false);
                                 }
                                 
-                                let data: String = res.json().await?;
-                                header.0 = data;
+                                let head = res.headers().clone();
+
+                                let p: Poll = res.json().await?;
+
+                                poll.poll = Some(p);
+
+                                if let Some(auth) = head.get("Authorization") {
+
+                                    if let Ok(token) = auth.to_str() {
+                                        header.0 = token.to_string();
+                                    }
+                                }
+
 
                                 Ok(true)
                             }.await;
 
                             if let Ok(final_res) = final_res {
                                 if final_res {
-                                    if let Ok(p) = get_poll(&c, id).await {
+                                    if (&poll.poll).is_some() {
                                         state.set(WindowState::VotePoll);
-                                        poll.poll = Some(p);
+                                        println!("Found poll: {:?}", &poll.poll);
+                                        println!("Switching to poll window");
                                     } else {
                                         println!("Could not get poll");
                                     }

@@ -16,7 +16,7 @@ pub async fn connect_to_poll(client: &Client, poll_id: usize) -> Result<Response
     client
         .execute(
             client
-                .post(apiroot(&format!("polls/{}/iot", poll_id)))
+                .post(apiroot(&format!("iot/polls/{}", poll_id)))
                 .build()?
         )
         .await
